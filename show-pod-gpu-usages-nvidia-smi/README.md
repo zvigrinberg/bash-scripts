@@ -4,7 +4,8 @@
 
 - Access to an openshift cluster with Nvidia GPU Node.
 - Login to this cluster before running the script.
-- [`jq`](https://jqlang.github.io/jq/) Installed on machine.
+- [`jq`](https://jqlang.github.io/jq/) Binary Installed on machine.
+- [`oc`](https://docs.openshift.com/container-platform/4.17/cli_reference/openshift_cli/getting-started-cli.html) - Openshift CLI binary installed on your machine
 
 ## How to Use
 
