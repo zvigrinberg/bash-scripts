@@ -1,4 +1,4 @@
-# Show Pods Nvidia GPU Usages
+# Show Pods Memory Utilization on Nvidia GPUs
 
 ## Objectives
 
