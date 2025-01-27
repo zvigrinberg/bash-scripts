@@ -10,11 +10,14 @@ fi
 NODE_NAME=$1
 OUTPUT_MODE=$2
 
-if [[ $OUTPUT_MODE == "" ]]
+if [[ $OUTPUT_MODE == "" || $OUTPUT_MODE == "normal"  ]]
 then
   OUTPUT_MODE="normal"
-else
+elif [[ $OUTPUT_MODE == "json" ]]
+then
   OUTPUT_MODE="json"
+else
+  OUTPUT_MODE="jsonlist"
 fi
 
 oc debug node/$NODE_NAME --dry-run=client -o yaml -n default | oc apply -f - --output=yaml | oc label -f - debug=node > /dev/null 2>&1
@@ -36,10 +39,14 @@ while read -r line
     else
       NAMESPACE=$(oc get pods -A | grep $POD_NAME | awk '{print $1}')
       JSON='{"pod_name": "'''$POD_NAME'''", "namespace": "'''$NAMESPACE'''", "memory": "'''$MEMORY'''", "node_host_pid": "'''$PID'''"}'
-      JSON_LIST="${JSON_LIST} ${JSON},"
+      if [[ $OUTPUT_MODE == "jsonlist" ]]; then
+        JSON_LIST="${JSON_LIST} ${JSON},"
+      else
+        echo $JSON | jq .
+      fi
     fi
  done < /tmp/pairs.txt
-if [[ $OUTPUT_MODE == "json" ]]; then
+if [[ $OUTPUT_MODE == "jsonlist" ]]; then
   JSON_LIST="${JSON_LIST}]"
   echo $JSON_LIST | sed 's/,]/]/g' | jq .
 fi

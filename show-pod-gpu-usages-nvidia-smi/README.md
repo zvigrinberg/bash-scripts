@@ -1,5 +1,11 @@
 # Show Pods Nvidia GPU Usages
 
+## Objectives
+
+- Show the GPU Memory Usage of pods running on a certain Openshift Cluster GPU Node
+- Instead of running a lot of commands on several different places, with intermediate outputs fed as the input to next place to lookup at, run one line script invocation from a client machine to get it all at once - aggregates all the data from different sources and then output it to the user terminal in the selected output format. 
+
+
 ## Prerequisites
 
 - Access to an openshift cluster with Nvidia GPU Node.
