@@ -3,7 +3,7 @@ if [[ $1 == "" ]]
 then
   echo "Usage: $0 <ocp_gpu_node_name>"
   echo "Usage: $0 <ocp_gpu_node_name> <OUTPUT_MODE>"
-  echo "OUTPUT_MODE=normal|json -> default => normal"
+  echo "OUTPUT_MODE=normal|json|jsonlist -> default => normal"
   exit 1
 fi
 
