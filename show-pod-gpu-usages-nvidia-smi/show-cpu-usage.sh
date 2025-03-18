@@ -29,7 +29,7 @@ then
    POD_OF_NODE=error_pod_not_exists
 fi
 
-oc get pods $POD_OF_NODE  -n nvidia-gpu-operator
+oc get pods $POD_OF_NODE  -n nvidia-gpu-operator > /dev/null
 retVal=$?
 if [ $retVal -ne 0 ]
 then
