@@ -23,11 +23,24 @@ fi
 oc debug node/$NODE_NAME --dry-run=client -o yaml -n default | oc apply -f - --output=yaml | oc label -f - debug=node > /dev/null 2>&1
 
 echo "Show all GPU Replicas Utilization On Node $NODE_NAME"
-oc exec -n nvidia-gpu-operator $(oc get pod -l=app=nvidia-device-plugin-daemonset -n nvidia-gpu-operator | grep -v NAME | awk '{print $1}') -c nvidia-device-plugin -- nvidia-smi
+POD_OF_NODE=$(oc get pod -l=app=nvidia-device-plugin-daemonset -n nvidia-gpu-operator -o json | jq .items[] | jq 'select(.spec.nodeName == "'''$NODE_NAME'''")' |  jq .metadata.name | tr '"' ' ')
+if [ -z "${POD_OF_NODE}" ]
+then
+   POD_OF_NODE=error_pod_not_exists
+fi
+
+oc get pods $POD_OF_NODE  -n nvidia-gpu-operator
+retVal=$?
+if [ $retVal -ne 0 ]
+then
+  echo $NODE_NAME " is Not a GPU Node, quitting"
+   exit $retVal
+fi
+
+oc exec -n nvidia-gpu-operator $POD_OF_NODE -c nvidia-device-plugin -- nvidia-smi
 echo
 echo "Show all Pods On Node $NODE_NAME using the GPU replicas:"
-echo
-oc exec -n nvidia-gpu-operator $(oc get pod -l=app=nvidia-device-plugin-daemonset -n nvidia-gpu-operator | grep -v NAME | awk '{print $1}') -c nvidia-device-plugin -- nvidia-smi --query-compute-apps=pid,used_memory --format=csv,noheader,nounits > /tmp/pairs.txt
+oc exec -n nvidia-gpu-operator $POD_OF_NODE -c nvidia-device-plugin -- nvidia-smi --query-compute-apps=pid,used_memory --format=csv,noheader,nounits > /tmp/pairs.txt
 JSON_LIST='['
 while read -r line
  do PID=$(echo $line | awk -F "," '{print $1}')
