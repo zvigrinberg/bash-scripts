@@ -5,6 +5,9 @@ UPSTREAM_BRANCH="${UPSTREAM_BRANCH:=main}"
 git fetch $UPSTREAM_REMOTE_NAME
 TEMP_BRANCH_FOR_COMPARISON=$(echo "$UPSTREAM_BRANCH"-temp1)
 
+# Delete the comparison branch in case it exists from previous runs
+git branch -D $TEMP_BRANCH_FOR_COMPARISON || true
+
 # Get the exploit_iq_common package addition' commit.  
 git checkout $STRUCTURE_CHANGED_TREE_REF
 EXPLOIT_IQ_COMMONS_COMMIT=$(git log --follow --diff-filter=A --oneline   src/exploit_iq_commons/ | awk '{print $1}')
