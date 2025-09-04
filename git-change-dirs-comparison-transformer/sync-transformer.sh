@@ -6,7 +6,7 @@ TEMP_BRANCH_FOR_COMPARISON=$(echo "$UPSTREAM_BRANCH"-temp1)
 
 # Get the exploit_iq_common package addition' commit.  
 git checkout $STRUCTURE_CHANGED_TREE_REF
-EXPLOIT_IQ_COMMONS_COMMIT=$(git log structure_changed --follow --diff-filter=A --oneline   src/exploit_iq_commons/ | awk '{print $1}')
+EXPLOIT_IQ_COMMONS_COMMIT=$(git log --follow --diff-filter=A --oneline   src/exploit_iq_commons/ | awk '{print $1}')
 
 # checkout to create the comparison branch
 git checkout $UPSTREAM_REMOTE_NAME/$UPSTREAM_BRANCH -b $TEMP_BRANCH_FOR_COMPARISON
