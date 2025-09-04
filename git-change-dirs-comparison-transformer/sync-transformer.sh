@@ -1,3 +1,4 @@
+# commit/branch/ref that should be the merge-to ref ( preferrably branch), having in its commits tree history the changed directories layout.
 STRUCTURE_CHANGED_TREE_REF="${STRUCTURE_CHANGED_TREE_REF:=cf9c6990b62a4bb6aad80efd6fd75fe45c00e0bc}"
 UPSTREAM_REMOTE_NAME="${UPSTREAM_REMOTE_NAME:=origin}"
 UPSTREAM_BRANCH="${UPSTREAM_BRANCH:=main}"
@@ -8,10 +9,10 @@ TEMP_BRANCH_FOR_COMPARISON=$(echo "$UPSTREAM_BRANCH"-temp1)
 git checkout $STRUCTURE_CHANGED_TREE_REF
 EXPLOIT_IQ_COMMONS_COMMIT=$(git log --follow --diff-filter=A --oneline   src/exploit_iq_commons/ | awk '{print $1}')
 
-# checkout to create the comparison branch
+# checkout the upstream branch to start from it the comparison branch
 git checkout $UPSTREAM_REMOTE_NAME/$UPSTREAM_BRANCH -b $TEMP_BRANCH_FOR_COMPARISON
 
-# write to files all renames performed on that commits.
+# write to a file all renames performed on the commit that introduced the directories layout structure change
 git show $EXPLOIT_IQ_COMMONS_COMMIT --name-status | grep -E '^R' > lines.txt
 
 # Read the file line by line to revert renames
