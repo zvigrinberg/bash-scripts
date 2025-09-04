@@ -28,6 +28,7 @@ while IFS= read -r line; do
 done < lines.txt
 
 # Add deleted files to index, so it will recognize it as a rename
+git add -u . 
 # create a commit of the renaming
 git commit -sm "completed transforming repository dir structure in upstream to something comparable to downstream"
 
